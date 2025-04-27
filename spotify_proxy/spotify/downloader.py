@@ -115,7 +115,7 @@ class SpotifyDownloader:
 
     def _get_task_id(self, request: SpotifyRequest) -> str:
         """Generate a unique task ID for a download request"""
-        return f"{request.channel_id}_{request.message_id}"
+        return f"{request.request_chat_id}_{request.request_message_id}"
 
     def _terminate_process(
         self, process: Optional[subprocess.Popen], task_id: str
@@ -518,8 +518,8 @@ class SpotifyDownloader:
                 "progress": task.progress,
                 "last_log_line_ts": task.last_log_line_ts,
                 "spotify_playlist_name": task.spotify_playlist_name,
-                "message_id": task.request.message_id,
-                "channel_id": task.request.channel_id,
+                "message_id": task.request.request_message_id,
+                "channel_id": task.request.request_chat_id,
                 "download_id": task.request.download_id,
                 "url": task.request.download_url,
                 "started_at": task.started_at,
@@ -1024,9 +1024,9 @@ class SpotifyDownloader:
         logger.info(
             "Processing download request",
             user_id=request.requested_by,
-            channel_id=request.channel_id,
+            channel_id=request.request_chat_id,
             url=request.download_url,
-            message_id=request.message_id,
+            message_id=request.request_message_id,
             download_id=request.download_id,
         )
         task_id = self._get_task_id(request)
@@ -1213,8 +1213,8 @@ class SpotifyDownloader:
             failed_status = {
                 "status": DownloadStatus.FAILED.value,
                 "progress": 0,
-                "message_id": request.message_id,
-                "channel_id": request.channel_id,
+                "message_id": request.request_message_id,
+                "channel_id": request.request_chat_id,
                 "download_id": request.download_id,
                 "url": request.download_url,
                 "error": f"Failed to start download: {e}",
@@ -1248,8 +1248,8 @@ class SpotifyDownloader:
             failed_status = {
                 "status": DownloadStatus.FAILED.value,
                 "progress": 0,
-                "message_id": request.message_id,
-                "channel_id": request.channel_id,
+                "message_id": request.request_message_id,
+                "channel_id": request.request_chat_id,
                 "url": request.download_url,
                 "error": f"Unexpected error: {e}",
                 "final_status_published": False,

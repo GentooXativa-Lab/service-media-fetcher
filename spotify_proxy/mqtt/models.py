@@ -1,11 +1,11 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class SpotifyRequest(BaseModel):
-    download_id: str = Field(alias="downloadId")
-    requested_by: str = Field(alias="requestedBy")
-    channel_id: int
-    download_url: str = Field(alias="downloadUrl")
-    message_id: int
+    download_id: str
+    requested_by: str
+    request_chat_id: int
+    download_url: str
+    request_message_id: int
     status: str
     is_admin: bool = False

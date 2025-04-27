@@ -70,10 +70,15 @@ async def handle_spotify_response(
         qos: Quality of service (not used, received from MQTT)
         properties: Message properties (not used, received from MQTT)
     """
+    decoded_payload = payload.decode("utf-8")
 
-    spotify_request = SpotifyRequest.model_validate_json(
-        payload.decode("utf-8")
+    logger.debug(
+        "Received Spotify request",
+        topic=topic,
+        payload=decoded_payload,
     )
+
+    spotify_request = SpotifyRequest.model_validate_json(decoded_payload)
 
     # Process message using SpotifyDownloader
     response = spotify_downloader.process_download_request(spotify_request)
