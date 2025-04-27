@@ -1,0 +1,90 @@
+[project]
+name = "service-spotify-proxy"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "gmqtt>=0.7.0",
+    "pydantic>=2.10.6",
+    "pydantic-settings>=2.8.1",
+    "structlog>=25.2.0",
+    "python-dotenv>=1.0.0",
+    "spotdl>=4.2.11",
+    "spotipy>=2.25.1",
+]
+
+
+[build-system]
+requires = ["setuptools > 61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"spotify_proxy"="spotify_proxy"}
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit>=4.0.1",
+    "pytest-asyncio>=0.24.0",
+    "pytest>=8.3.4",
+    "pytest-cov>=6.0.0",
+    "pytest-httpx>=0.35.0",
+]
+
+lint = [
+    "pre-commit>=4.0.1",
+]
+
+
+[tool.ruff]
+target-version = "py311"
+fix = true
+line-length = 79
+
+[tool.ruff.lint]
+select = ["A", "ARG", "ASYNC", "B", "BLE", "C", "C4", "E", "F", "FA", "I", "INT", "N", "PIE", "PTH", "RUF", "SIM", "TCH", "TD", "W", "YTT"]
+ignore = ["B008", "B904", "B905", "TD002", "TD003", "TD004", "RUF012"]
+exclude = ["docker/*"]
+
+[tool.coverage.report]
+fail_under = 95
+skip_covered = false
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "pragma: cannot cover",  # these are really covered in tests, but unregistered
+    "pragma: will cover",
+    "if TYPE_CHECKING:",
+    "if __name__ == \"__main__\":",
+    "raise NotImplementedError",
+]
+
+omit = [
+    "mediahub/docker/*",
+]
+
+[tool.pytest.ini_options]
+minversion = 7.0
+testpaths = ["tests"]
+addopts = "-m 'not docs' --cov=telegram_adapter --cov-report=term --cov-report=html"
+log_cli = false
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "docs: marks tests to generate OpenAPI specs for different device-kinds and more auto-generated documentation",
+]
+filterwarnings = [
+    "ignore:Remove `format_exc_info` from your processor chain if you want pretty exceptions.:UserWarning",
+]
+
+[dependency-groups]
+dev = [
+    "pyright>=1.1.398",
+    "pytest>=8.3.5",
+    "pytest-asyncio>=0.25.3",
+    "pytest-cov>=6.0.0",
+    "pytest-httpx>=0.35.0",
+    "ruff>=0.11.2",
+]
+
+
